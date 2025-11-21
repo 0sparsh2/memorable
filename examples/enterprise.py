@@ -43,6 +43,17 @@ response2 = client.chat.completions.create(
 )
 
 # Memories are isolated per namespace
-print("User 1 memories:", await memory.search_memories("Python"))
-print("User 2 memories:", await memory.search_memories("JavaScript"))
+import asyncio
+
+async def main():
+    memory.config.memory.namespace = "user_1"
+    user1_memories = await memory.search_memories("Python")
+    print("User 1 memories:", user1_memories)
+    
+    memory.config.memory.namespace = "user_2"
+    user2_memories = await memory.search_memories("JavaScript")
+    print("User 2 memories:", user2_memories)
+
+if __name__ == "__main__":
+    asyncio.run(main())
 
