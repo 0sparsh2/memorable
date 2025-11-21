@@ -30,12 +30,12 @@ jobs:
     
     - name: Lint with flake8
       run: |
-        flake8 memorable tests examples --count --select=E9,F63,F7,F82 --show-source --statistics
-        flake8 memorable tests examples --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        flake8 memorable_ai tests examples --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 memorable_ai tests examples --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     
     - name: Type check with mypy
       run: |
-        mypy memorable --ignore-missing-imports || true
+        mypy memorable_ai --ignore-missing-imports || true
     
     - name: Test with pytest
       run: |

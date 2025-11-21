@@ -12,15 +12,15 @@ test:
 	pytest tests/ -v
 
 test-cov:
-	pytest tests/ --cov=memorable --cov-report=html --cov-report=term-missing
+	pytest tests/ --cov=memorable_ai --cov-report=html --cov-report=term-missing
 
 lint:
-	flake8 memorable tests examples
-	mypy memorable
+	flake8 memorable_ai tests examples
+	mypy memorable_ai
 
 format:
-	black memorable tests examples benchmarks
-	isort memorable tests examples benchmarks
+	black memorable_ai tests examples benchmarks
+	isort memorable_ai tests examples benchmarks
 
 clean:
 	find . -type d -name __pycache__ -exec rm -r {} +
