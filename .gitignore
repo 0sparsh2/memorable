@@ -1,0 +1,76 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Environment variables
+.env
+.env.local
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+benchmarks/results/
+docs/_build/
+
+# Test files (keep only test_describe_simple.py as example)
+test_*.py
+!test_describe_simple.py
+
+# Analysis and temporary documentation
+cursor_analyze_memori_and_supermemory_r.md
+*_TEST_RESULTS.md
+analysis_memory_projects.md
+
+# Build artifacts
+memorable.egg-info/
+build/
+dist/
+*.egg
+
