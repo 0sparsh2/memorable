@@ -40,7 +40,7 @@ This guide will help you publish Memorable to PyPI so users can `pip install mem
 
 ## Step 3: Add Tokens to GitHub Secrets (Manual - 3 minutes)
 
-1. Go to: https://github.com/0sparsh2/memorable/settings/secrets/actions
+1. Go to: https://github.com/0sparsh2/memorable-ai/settings/secrets/actions
 2. Click "New repository secret"
 3. Name: `PYPI_API_TOKEN`
 4. Value: Paste your production PyPI token

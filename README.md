@@ -38,13 +38,13 @@ pip install memorable-ai
 
 **From GitHub:**
 ```bash
-pip install git+https://github.com/0sparsh2/memorable.git
+pip install git+https://github.com/0sparsh2/memorable-ai.git
 ```
 
 **From Source:**
 ```bash
-git clone https://github.com/0sparsh2/memorable.git
-cd memorable
+git clone https://github.com/0sparsh2/memorable-ai.git
+cd memorable-ai
 pip install -e .
 ```
 
@@ -123,8 +123,8 @@ pip install memorable-ai
 ### From Source
 
 ```bash
-git clone https://github.com/0sparsh2/memorable.git
-cd memorable
+git clone https://github.com/0sparsh2/memorable-ai.git
+cd memorable-ai
 pip install -e .
 ```
 
@@ -400,8 +400,8 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 
 ```bash
 # Clone repository
-git clone https://github.com/0sparsh2/memorable.git
-cd memorable
+git clone https://github.com/0sparsh2/memorable-ai.git
+cd memorable-ai
 
 # Install in development mode
 pip install -e ".[dev]"
@@ -441,8 +441,8 @@ Memorable is built on the excellent work of:
 ## Support
 
 - **Documentation**: [docs/](docs/)
-- **Issues**: https://github.com/0sparsh2/memorable/issues
-- **Discussions**: https://github.com/0sparsh2/memorable/discussions
+- **Issues**: https://github.com/0sparsh2/memorable-ai/issues
+- **Discussions**: https://github.com/0sparsh2/memorable-ai/discussions
 
 ---
 
@@ -450,6 +450,6 @@ Memorable is built on the excellent work of:
 
 **Memorable** - The easiest, most efficient memory system for AI applications.
 
-[⭐ Star us on GitHub](https://github.com/0sparsh2/memorable) • [📖 Read the Docs](docs/) • [💬 Join Discussions](https://github.com/0sparsh2/memorable/discussions)
+[⭐ Star us on GitHub](https://github.com/0sparsh2/memorable-ai) • [📖 Read the Docs](docs/) • [💬 Join Discussions](https://github.com/0sparsh2/memorable-ai/discussions)
 
 </div>
