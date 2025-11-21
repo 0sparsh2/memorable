@@ -12,7 +12,7 @@ References:
 - Supermemory: https://github.com/supermemoryai/supermemory
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 from memorable_ai.core.memory_engine import MemoryEngine
 

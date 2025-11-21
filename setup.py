@@ -29,7 +29,7 @@ except FileNotFoundError:
 
 setup(
     name="memorable-ai",
-    version="0.1.0",
+    version="0.1.1",
     author="Memorable Team",
     description="Advanced Memory Engine for LLMs, AI Agents & Multi-Agent Systems",
     long_description=long_description,
