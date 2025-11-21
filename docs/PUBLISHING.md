@@ -62,7 +62,7 @@ pip uninstall memorable -y
 pip install memorable-ai
 
 # Verify it works
-python -c "import memorable_ai; print(memorable.__version__)"
+python -c "import memorable_ai; print(memorable_ai.__version__)"
 ```
 
 ## Automated Publishing with GitHub Actions
