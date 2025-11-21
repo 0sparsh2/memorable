@@ -26,17 +26,6 @@ Memorable is the first memory system that combines the best of three leading app
 
 **Result**: A production-ready memory system that requires no code changes, works with any SQL database, supports 100+ LLM models, and includes optional graph capabilities.
 
-## Why Memorable?
-
-| Feature | Memorable | Memori | Mem0 | Supermemory |
-|---------|-----------|--------|------|-------------|
-| **Zero-Code Integration** | ✅ Interceptor | ✅ Interceptor | ❌ API calls | ❌ API calls |
-| **Research-Backed** | ✅ Yes | ❌ No | ✅ Yes | ❌ No |
-| **Graph Support** | ✅ Optional | ❌ No | ❌ No | ✅ Required |
-| **SQL Database** | ✅ Any SQL | ✅ Any SQL | ⚠️ Limited | ⚠️ Limited |
-| **Multi-Model** | ✅ 100+ models | ⚠️ Limited | ⚠️ Limited | ⚠️ Limited |
-| **Memory Modes** | ✅ 3 modes | ✅ 3 modes | ⚠️ 1 mode | ⚠️ 1 mode |
-| **Production-Ready** | ✅ Yes | ✅ Yes | ⚠️ Partial | ⚠️ Partial |
 
 ## Quick Start
 
@@ -332,20 +321,6 @@ Memorable is designed to outperform existing systems:
 - **50%+ token savings** vs full-context (target)
 
 *Benchmark results will be published in upcoming releases. See [docs/benchmarks.md](docs/benchmarks.md) for methodology.*
-
-## Comparison with Other Systems
-
-| Feature | Memorable | Memori | Mem0 | Supermemory |
-|---------|-----------|--------|------|-------------|
-| **Easy Integration** | ✅ Interceptor | ✅ Interceptor | ⚠️ API calls | ⚠️ API calls |
-| **Research-Backed** | ✅ Yes | ❌ No | ✅ Yes | ❌ No |
-| **Graph Support** | ✅ Optional | ❌ No | ❌ No | ✅ Required |
-| **SQL Database** | ✅ Any SQL | ✅ Any SQL | ⚠️ Limited | ⚠️ Limited |
-| **Multi-hop** | ✅ Yes | ❌ No | ⚠️ Limited | ✅ Yes |
-| **Memory Modes** | ✅ 3 modes | ✅ 3 modes | ⚠️ 1 mode | ⚠️ 1 mode |
-| **Temporal Memory** | ✅ Yes | ❌ No | ⚠️ Limited | ❌ No |
-| **Consolidation** | ✅ Yes | ❌ No | ✅ Yes | ❌ No |
-| **Multi-Model** | ✅ 100+ | ⚠️ Limited | ⚠️ Limited | ⚠️ Limited |
 
 ## Research & Citations
 
