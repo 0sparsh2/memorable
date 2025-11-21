@@ -31,7 +31,12 @@ Memorable is the first memory system that combines the best of three leading app
 
 ### Installation
 
-**From GitHub (Recommended):**
+**From PyPI (Recommended):**
+```bash
+pip install memorable
+```
+
+**From GitHub:**
 ```bash
 pip install git+https://github.com/0sparsh2/memorable.git
 ```
@@ -43,7 +48,14 @@ cd memorable
 pip install -e .
 ```
 
-**Note:** The package will be published to PyPI soon. For now, install directly from GitHub.
+**With Optional Dependencies:**
+```bash
+# With graph support
+pip install memorable[graph]
+
+# With development dependencies
+pip install memorable[dev]
+```
 
 ### 30-Second Example
 
