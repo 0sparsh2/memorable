@@ -117,24 +117,96 @@ class Storage:
         """
         Store memories in database.
         
+        Checks for duplicates before storing to avoid storing the same memory multiple times.
+        
         Args:
             memories: List of memory dictionaries
         """
+        if not memories:
+            return
+            
         session = self.get_session()
         try:
+            stored_count = 0
+            skipped_count = 0
+            
             for memory_data in memories:
+                content = memory_data.get("content", "").strip()
+                if not content:
+                    continue
+                    
+                memory_type = memory_data.get("type", "fact")
+                namespace = self.namespace or memory_data.get("namespace")
+                
+                # Check if a similar memory already exists
+                # Check for exact match first (case-insensitive)
+                existing = (
+                    session.query(Memory)
+                    .filter(Memory.content.ilike(content))
+                    .filter(Memory.memory_type == memory_type)
+                    .filter(Memory.namespace == namespace if namespace else Memory.namespace.is_(None))
+                    .first()
+                )
+                
+                if existing:
+                    # Memory already exists, skip or update
+                    logger.debug(f"Memory already exists (skipping): {content[:50]}...")
+                    skipped_count += 1
+                    # Update timestamp and access count to show it was referenced again
+                    existing.updated_at = datetime.utcnow()
+                    existing.access_count = (existing.access_count or 0) + 1
+                    continue
+                
+                # Check for similar content (fuzzy match for near-duplicates)
+                # Get all memories with same type and namespace to check for similar content
+                all_similar = (
+                    session.query(Memory)
+                    .filter(Memory.memory_type == memory_type)
+                    .filter(Memory.namespace == namespace if namespace else Memory.namespace.is_(None))
+                    .all()
+                )
+                
+                # Check if any existing memory has very similar content (>90% similarity)
+                content_lower = content.lower()
+                is_duplicate = False
+                for existing_mem in all_similar:
+                    existing_content_lower = existing_mem.content.lower()
+                    # Simple similarity check: if one contains the other or vice versa
+                    if (content_lower in existing_content_lower and len(content_lower) < len(existing_content_lower)) or \
+                       (existing_content_lower in content_lower and len(existing_content_lower) < len(content_lower)):
+                        # Check word overlap for better similarity
+                        content_words = set(content_lower.split())
+                        existing_words = set(existing_content_lower.split())
+                        if content_words and existing_words:
+                            overlap = len(content_words.intersection(existing_words))
+                            total_unique = len(content_words.union(existing_words))
+                            similarity = overlap / total_unique if total_unique > 0 else 0
+                            if similarity > 0.8:  # 80% word overlap
+                                logger.debug(f"Similar memory already exists (skipping): {content[:50]}... (similarity: {similarity:.2f})")
+                                skipped_count += 1
+                                is_duplicate = True
+                                # Update existing memory
+                                existing_mem.updated_at = datetime.utcnow()
+                                existing_mem.access_count = (existing_mem.access_count or 0) + 1
+                                break
+                
+                if is_duplicate:
+                    continue
+                
+                # Store new memory
                 memory = Memory(
-                    content=memory_data.get("content", ""),
-                    memory_type=memory_data.get("type", "fact"),
-                    namespace=self.namespace or memory_data.get("namespace"),
+                    content=content,
+                    memory_type=memory_type,
+                    namespace=namespace,
                     extra_metadata=memory_data.get("metadata", {}),
                     embedding=memory_data.get("embedding"),
                     importance_score=memory_data.get("importance_score", 0.0),
                 )
                 session.add(memory)
+                stored_count += 1
 
             session.commit()
-            logger.debug(f"Stored {len(memories)} memories")
+            logger.debug(f"Stored {stored_count} new memories, skipped {skipped_count} duplicates")
         except Exception as e:
             session.rollback()
             logger.error(f"Failed to store memories: {e}")

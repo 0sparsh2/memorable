@@ -81,17 +81,41 @@ class MemoryExtractor:
     def _extract_text(
         self, messages: List[Dict[str, Any]], response: Optional[Any] = None
     ) -> str:
-        """Extract text content from messages and response."""
+        """
+        Extract text content from messages and response.
+        
+        Focuses on the latest user message and LLM response to extract new memories,
+        avoiding re-extraction from historical conversation.
+        """
         text_parts = []
 
-        for msg in messages:
+        # Extract text from the latest user message (most recent information)
+        # Look for the last user message in the conversation
+        for msg in reversed(messages):
             if isinstance(msg, dict):
-                content = msg.get("content", "")
-                if content:
-                    text_parts.append(content)
+                role = msg.get("role", "")
+                # Focus on user messages (they contain new information)
+                if role == "user":
+                    content = msg.get("content", "")
+                    if content:
+                        text_parts.append(content)
+                        # Only extract from the latest user message to avoid duplicates
+                        break
             elif isinstance(msg, str):
                 text_parts.append(msg)
+                break
 
+        # If no user message found, fall back to all messages
+        if not text_parts:
+            for msg in messages:
+                if isinstance(msg, dict):
+                    content = msg.get("content", "")
+                    if content:
+                        text_parts.append(content)
+                elif isinstance(msg, str):
+                    text_parts.append(msg)
+
+        # Extract text from LLM response (may contain additional facts)
         if response:
             if isinstance(response, dict):
                 # Handle OpenAI format
@@ -116,17 +140,35 @@ class MemoryExtractor:
         Patterns:
         - "I am...", "I have...", "I work at..."
         - "My name is...", "I live in..."
+        - Third-person: "[Name] lives in...", "[Name] works at...", etc.
         """
         facts = []
         
         # Simple pattern matching (can be enhanced with LLM)
-        patterns = [
-            r"I (?:am|have|work at|live in|use|build|create) ([^\.]+)",
-            r"My (?:name is|email is|phone is|address is) ([^\.]+)",
-            r"I'm (?:a|an) ([^\.]+)",
+        # First-person patterns
+        first_person_patterns = [
+            r"I (?:am|have|work at|live in|use|build|create) ([^\.\?]+)",
+            r"My (?:name is|email is|phone is|address is) ([^\.\?]+)",
+            r"I'm (?:a|an) ([^\.\?]+)",
         ]
-
-        for pattern in patterns:
+        
+        # Third-person patterns - extract full statement
+        # Pattern: "[Name] [verb] [location/description]"
+        # These patterns match the full statement including the name
+        # Match capitalized names (proper nouns) at word boundaries
+        third_person_patterns = [
+            # "[Name] lives in [place]"
+            r"([A-Z][a-zA-Z]+(?: [A-Z][a-zA-Z]+)?) (?:lives in|lives at|lives) ([^\.\?]+)",
+            # "[Name] works at/in [place]"
+            r"([A-Z][a-zA-Z]+(?: [A-Z][a-zA-Z]+)?) (?:works at|works in|works) ([^\.\?]+)",
+            # "[Name] is from [place]"
+            r"([A-Z][a-zA-Z]+(?: [A-Z][a-zA-Z]+)?) (?:is from|is) ([^\.\?]+)",
+            # "[Name] has [attribute]"
+            r"([A-Z][a-zA-Z]+(?: [A-Z][a-zA-Z]+)?) (?:has|has a|has an) ([^\.\?]+)",
+        ]
+        
+        # Extract first-person facts
+        for pattern in first_person_patterns:
             matches = re.finditer(pattern, text, re.IGNORECASE)
             for match in matches:
                 fact_text = match.group(1).strip()
@@ -135,6 +177,23 @@ class MemoryExtractor:
                         "content": fact_text,
                         "type": "fact",
                         "metadata": {"extraction_method": "pattern"},
+                    })
+        
+        # Extract third-person facts - store full statement
+        for pattern in third_person_patterns:
+            matches = re.finditer(pattern, text, re.IGNORECASE)
+            for match in matches:
+                person = match.group(1).strip()
+                description = match.group(2).strip()
+                # Create a complete fact statement: "Person [verb] description"
+                # Get the full matched text and clean it
+                full_match = match.group(0).strip().rstrip('?').strip()
+                
+                if len(full_match) > 5:  # Filter very short matches
+                    facts.append({
+                        "content": full_match,
+                        "type": "fact",
+                        "metadata": {"extraction_method": "pattern", "person": person},
                     })
 
         return facts
@@ -146,28 +205,61 @@ class MemoryExtractor:
         Patterns:
         - "I like...", "I prefer...", "I love..."
         - "I don't like...", "I hate..."
+        - Third-person: "[Name] likes...", "[Name] prefers...", etc.
         """
         preferences = []
 
-        patterns = [
-            r"I (?:like|love|prefer|enjoy|favorite) ([^\.]+)",
-            r"I (?:don't|do not) (?:like|enjoy) ([^\.]+)",
-            r"I (?:hate|dislike) ([^\.]+)",
-            r"My favorite ([^\.]+) is ([^\.]+)",
+        # First-person patterns
+        first_person_patterns = [
+            r"I (?:like|love|prefer|enjoy|favorite) ([^\.\?]+)",
+            r"I (?:don't|do not) (?:like|enjoy) ([^\.\?]+)",
+            r"I (?:hate|dislike) ([^\.\?]+)",
+            r"My favorite ([^\.\?]+) is ([^\.\?]+)",
+        ]
+        
+        # Third-person patterns
+        third_person_patterns = [
+            # "[Name] likes [thing]"
+            r"([A-Z][a-zA-Z]+(?: [A-Z][a-zA-Z]+)?) (?:likes|loves|prefers|enjoys) ([^\.\?]+)",
+            # "[Name] hates [thing]"
+            r"([A-Z][a-zA-Z]+(?: [A-Z][a-zA-Z]+)?) (?:hates|dislikes) ([^\.\?]+)",
         ]
 
-        for pattern in patterns:
+        # Extract first-person preferences
+        for pattern in first_person_patterns:
             matches = re.finditer(pattern, text, re.IGNORECASE)
             for match in matches:
-                pref_text = match.group(1).strip()
-                if len(pref_text) > 3:
-                    sentiment = "positive" if "don't" not in pattern and "hate" not in pattern else "negative"
+                if match.groups():
+                    pref_text = match.group(1).strip() if match.group(1) else ""
+                    if len(pref_text) > 3:
+                        sentiment = "positive" if "don't" not in pattern and "hate" not in pattern else "negative"
+                        preferences.append({
+                            "content": pref_text,
+                            "type": "preference",
+                            "metadata": {
+                                "sentiment": sentiment,
+                                "extraction_method": "pattern",
+                            },
+                        })
+        
+        # Extract third-person preferences - store full statement
+        for pattern in third_person_patterns:
+            matches = re.finditer(pattern, text, re.IGNORECASE)
+            for match in matches:
+                person = match.group(1).strip() if match.group(1) else ""
+                thing = match.group(2).strip() if len(match.groups()) > 1 and match.group(2) else ""
+                # Get the full matched text
+                full_match = match.group(0).strip().rstrip('?').strip()
+                
+                if len(full_match) > 5:
+                    sentiment = "positive" if "hates" not in pattern and "dislikes" not in pattern else "negative"
                     preferences.append({
-                        "content": pref_text,
+                        "content": full_match,
                         "type": "preference",
                         "metadata": {
                             "sentiment": sentiment,
                             "extraction_method": "pattern",
+                            "person": person,
                         },
                     })
 
@@ -258,13 +350,62 @@ class MemoryExtractor:
     def _deduplicate_memories(
         self, memories: List[Dict[str, Any]]
     ) -> List[Dict[str, Any]]:
-        """Remove duplicate memories based on content similarity."""
+        """
+        Remove duplicate memories based on content similarity.
+        
+        Handles both exact duplicates and partial duplicates (e.g., "he lives in Seattle" 
+        vs "sparsh, he lives in Seattle"). Keeps the longer, more complete version.
+        """
+        if not memories:
+            return []
+        
+        # First pass: filter empty and sort by length (longer first)
+        valid_memories = []
+        for memory in memories:
+            content = memory.get("content", "").strip()
+            if content:
+                valid_memories.append((len(content), memory))
+        
+        # Sort by length descending (longer memories first)
+        valid_memories.sort(key=lambda x: x[0], reverse=True)
+        
         seen = set()
         unique_memories = []
 
-        for memory in memories:
-            content_lower = memory["content"].lower().strip()
-            if content_lower not in seen:
+        for _, memory in valid_memories:
+            content = memory["content"].strip()
+            content_lower = content.lower().strip()
+            
+            # Skip exact duplicates
+            if content_lower in seen:
+                continue
+            
+            # Check for partial duplicates (one contains the other)
+            is_subset = False
+            for seen_content in seen:
+                seen_lower = seen_content.lower()
+                # If current content is a substring of an existing (longer) memory, skip it
+                # We prefer longer, more complete memories
+                if len(content_lower) < len(seen_lower) and content_lower in seen_lower:
+                    # Current is a substring of existing, skip it
+                    is_subset = True
+                    break
+            
+            if not is_subset:
+                # Also check if any existing memory is a substring of current
+                # If so, remove the shorter one and keep the longer
+                to_remove = []
+                for idx, existing_mem in enumerate(unique_memories):
+                    existing_content_lower = existing_mem["content"].lower().strip()
+                    if existing_content_lower in content_lower and len(existing_content_lower) < len(content_lower):
+                        # Existing is a substring of current, mark for removal
+                        to_remove.append((idx, existing_content_lower))
+                
+                # Remove shorter versions
+                for idx, content_to_remove in reversed(to_remove):
+                    unique_memories.pop(idx)
+                    seen.remove(content_to_remove)
+                
                 seen.add(content_lower)
                 unique_memories.append(memory)
 
