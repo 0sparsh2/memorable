@@ -33,7 +33,7 @@ Memorable is the first memory system that combines the best of three leading app
 
 **From PyPI (Recommended):**
 ```bash
-pip install memorable
+pip install memorable-ai
 ```
 
 **From GitHub:**
@@ -51,10 +51,10 @@ pip install -e .
 **With Optional Dependencies:**
 ```bash
 # With graph support
-pip install memorable[graph]
+pip install memorable-ai[graph]
 
 # With development dependencies
-pip install memorable[dev]
+pip install memorable-ai[dev]
 ```
 
 ### 30-Second Example
@@ -117,7 +117,7 @@ Works with 100+ models via LiteLLM: OpenAI, Anthropic, Gemini, Llama, Mistral, a
 ### From PyPI (Recommended)
 
 ```bash
-pip install memorable
+pip install memorable-ai
 ```
 
 ### From Source

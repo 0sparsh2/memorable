@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "memorable"
+name = "memorable-ai"
 version = "0.1.0"
 description = "Advanced Memory Engine for LLMs, AI Agents & Multi-Agent Systems"
 readme = "README.md"

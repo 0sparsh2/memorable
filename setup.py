@@ -28,7 +28,7 @@ except FileNotFoundError:
     ]
 
 setup(
-    name="memorable",
+    name="memorable-ai",
     version="0.1.0",
     author="Memorable Team",
     description="Advanced Memory Engine for LLMs, AI Agents & Multi-Agent Systems",

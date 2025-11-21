@@ -1,6 +1,6 @@
 # Publishing to PyPI
 
-This guide explains how to publish Memorable to PyPI so users can install it with `pip install memorable`.
+This guide explains how to publish Memorable to PyPI so users can install it with `pip install memorable-ai-ai`.
 
 ## Prerequisites
 
@@ -59,7 +59,7 @@ After publishing, verify it works:
 pip uninstall memorable -y
 
 # Install from PyPI
-pip install memorable
+pip install memorable-ai
 
 # Verify it works
 python -c "import memorable; print(memorable.__version__)"
