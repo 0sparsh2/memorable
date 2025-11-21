@@ -123,7 +123,7 @@ pip install memorable-ai
 ### From Source
 
 ```bash
-git clone https://github.com/yourusername/memorable.git
+git clone https://github.com/0sparsh2/memorable.git
 cd memorable
 pip install -e .
 ```
@@ -441,8 +441,8 @@ Memorable is built on the excellent work of:
 ## Support
 
 - **Documentation**: [docs/](docs/)
-- **Issues**: https://github.com/yourusername/memorable/issues
-- **Discussions**: https://github.com/yourusername/memorable/discussions
+- **Issues**: https://github.com/0sparsh2/memorable/issues
+- **Discussions**: https://github.com/0sparsh2/memorable/discussions
 
 ---
 
@@ -450,6 +450,6 @@ Memorable is built on the excellent work of:
 
 **Memorable** - The easiest, most efficient memory system for AI applications.
 
-[⭐ Star us on GitHub](https://github.com/yourusername/memorable) • [📖 Read the Docs](docs/) • [💬 Join Discussions](https://github.com/yourusername/memorable/discussions)
+[⭐ Star us on GitHub](https://github.com/0sparsh2/memorable) • [📖 Read the Docs](docs/) • [💬 Join Discussions](https://github.com/0sparsh2/memorable/discussions)
 
 </div>
