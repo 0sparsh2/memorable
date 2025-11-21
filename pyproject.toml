@@ -9,6 +9,7 @@ description = "Advanced Memory Engine for LLMs, AI Agents & Multi-Agent Systems"
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "Apache-2.0"}
+readme = "README.md"
 authors = [
     {name = "Memorable Team"}
 ]
@@ -27,7 +28,7 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-graph = ["neo4j>=5.0.0", "networkx>=3.0"]
+graph = ["neo4j>=5.0.0"]
 dev = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
@@ -36,6 +37,9 @@ dev = [
     "flake8>=6.0.0",
     "mypy>=1.0.0",
 ]
+
+[project.scripts]
+memorable = "memorable.cli:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

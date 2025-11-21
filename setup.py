@@ -15,7 +15,7 @@ setup(
     description="Advanced Memory Engine for LLMs, AI Agents & Multi-Agent Systems",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/memorable",
+    url="https://github.com/0sparsh2/memorable",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 3 - Alpha",
